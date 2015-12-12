@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Segment : MonoBehaviour {
 	protected AudioSource soundSrc;
+	protected bool growing;
 
 	// Use this for initialization
  	protected virtual void Start () {
@@ -21,6 +22,10 @@ public class Segment : MonoBehaviour {
 
 	// Grow is called when this segment is to grow
 	public virtual void Grow () {
+		growing = true;
+	}
 
+	public bool Growing() {
+		return growing;
 	}
 }

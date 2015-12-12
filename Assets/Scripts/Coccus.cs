@@ -5,7 +5,6 @@ public class Coccus : Segment {
 	public AudioClip touchSound;
 	public AnimationCurve growCurve;
 
-	protected bool growing;
 	protected float growTime;
 
 	// Use this for initialization
@@ -20,6 +19,7 @@ public class Coccus : Segment {
 			growTime += Time.deltaTime;
 			if(growTime >= growCurve.keys[growCurve.length-1].time) 	{
 				growTime = growCurve.keys[growCurve.length-1].time;
+				growing = false;
 			}
 			float s = growCurve.Evaluate(growTime);
 			transform.localScale = new Vector3(s, s, s);
@@ -28,7 +28,7 @@ public class Coccus : Segment {
 
 	public override void Grow ()
 	{
-		growing = true;
+		base.Grow ();
 	}
 
 	public override void OnTouch ()
