@@ -21,11 +21,14 @@ public class Segment : MonoBehaviour {
 	}
 
 	// Grow is called when this segment is to grow
-	public virtual void Grow () {
-		growing = true;
+	public virtual void Grow (bool adult) {
 	}
 
 	public bool Growing() {
 		return growing;
+	}
+
+	// Link connects the given segment to this one
+	public virtual void Link(Segment other) {
 	}
 }
