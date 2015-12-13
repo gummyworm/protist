@@ -7,11 +7,14 @@ public class Coccus : Segment {
 	public Color color;
 	public float pulseDuration;
 	public Color pulseColor;
+	public Vector3 speed;
+	public Vector3 amplitude;
 
 	protected float growTime;
 	protected float prevSize;
 
 	protected bool pulsing;
+	protected bool animate;
 
 	protected Renderer ren;
 
@@ -23,6 +26,8 @@ public class Coccus : Segment {
 		if (ren != null) {
 			ren.material.color = color;
 		}
+		animate = true;
+		StartCoroutine (Animate ());
 	}
 	
 	// Update is called once per frame
@@ -88,4 +93,16 @@ public class Coccus : Segment {
 			yield return null;
 		}
 	}
+
+	public override IEnumerator Animate() {
+		float t = 0.0f;
+		while(true) {
+			if (animate) {
+				transform.localPosition = new Vector3(Mathf.Sin(t), transform.localPosition.y, transform.localPosition.z);
+				t += Time.deltaTime;
+			}
+			yield return null;
+		}
+	}
+
 }

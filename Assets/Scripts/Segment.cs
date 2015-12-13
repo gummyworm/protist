@@ -33,7 +33,13 @@ public class Segment : MonoBehaviour {
 	public virtual void Link(Segment other) {
 	}
 
+	// Pulse is called when the segment is activated
 	public virtual IEnumerator Pulse () {
+		return null;
+	}
+
+	// Animate is a coroutine that continuously animates this segment
+	public virtual IEnumerator Animate() {
 		return null;
 	}
 }
