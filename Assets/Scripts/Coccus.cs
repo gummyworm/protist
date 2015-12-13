@@ -68,7 +68,8 @@ public class Coccus : Segment {
 		if (other.GetComponent<SphereCollider> () != null) {
 			r2 = other.GetComponent<SphereCollider>().radius;
 		}
-		other.transform.localPosition = transform.position + new Vector3 (0, 2 * (r1 + r2), 0);
+		other.transform.localPosition = other.transform.position +
+			new Vector3 (0, transform.position.y + (r1 + r2), 0);
 	}
 
 	public override void OnTouch ()
