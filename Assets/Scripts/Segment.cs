@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Segment : MonoBehaviour {
 	protected AudioSource soundSrc;
+	protected AudioSource pulseSound;
 	protected bool growing;
 
 	// Use this for initialization
@@ -30,5 +31,9 @@ public class Segment : MonoBehaviour {
 
 	// Link connects the given segment to this one
 	public virtual void Link(Segment other) {
+	}
+
+	public virtual IEnumerator Pulse () {
+		return null;
 	}
 }

@@ -13,6 +13,7 @@ public class Chain : MonoBehaviour {
 	protected List<Segment> segments;
 	protected SphereCollider segCollider;
 	protected float segRadius;
+	protected bool repeatPulse = true;
 
 	// Use this for initialization
 	void Start () {
@@ -20,6 +21,7 @@ public class Chain : MonoBehaviour {
 		for (int i = 0; i < baseSize; ++i) {
 			AddSegment (true);
 		}
+		StartCoroutine (Pulse ());
 	}
 	void AddSegment (bool adult) {
 		Segment prevSeg;
@@ -56,5 +58,13 @@ public class Chain : MonoBehaviour {
 	// Feed gives the chain the given amount of food.
 	public void Feed (int amnt) {
 		food += amnt;
+	}
+
+	public IEnumerator Pulse() {
+		while (repeatPulse) {
+			for (int i = 0; i < segments.Count; ++i) {
+				yield return StartCoroutine (segments [i].Pulse ());
+			}
+		}
 	}
 }

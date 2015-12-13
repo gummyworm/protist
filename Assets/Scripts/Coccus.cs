@@ -5,17 +5,23 @@ public class Coccus : Segment {
 	public AudioClip touchSound;
 	public AnimationCurve growCurve;
 	public Color color;
+	public float pulseDuration;
+	public Color pulseColor;
 
 	protected float growTime;
 	protected float prevSize;
+
+	protected bool pulsing;
+
+	protected Renderer ren;
 
 	// Use this for initialization
 	protected override void Start () {
 		base.Start ();
 		growTime = 0.0f;
-
-		if (GetComponent<Renderer>() != null) {
-			GetComponent<Renderer>().material.color = color;
+		ren = GetComponent<Renderer> ();
+		if (ren != null) {
+			ren.material.color = color;
 		}
 	}
 	
@@ -64,5 +70,22 @@ public class Coccus : Segment {
 	{
 		soundSrc.clip = touchSound;		
 		soundSrc.Play ();
+	}
+
+	public override IEnumerator Pulse() {
+		if (soundSrc != null) {
+			pulseSound.Play();
+		}
+		if (ren == null) {
+			return false;
+		}
+		for (float t = 0.0f; t < pulseDuration; t += Time.deltaTime) {
+			ren.material.color = Color.Lerp(color, pulseColor, t / (pulseDuration));
+			yield return null;
+		}
+		for (float t = 0.0f; t < pulseDuration; t += Time.deltaTime) {
+			ren.material.color = Color.Lerp(pulseColor, color, t / (pulseDuration));
+			yield return null;
+		}
 	}
 }
