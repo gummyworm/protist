@@ -11,8 +11,8 @@ public class Chain : MonoBehaviour {
 	public int maxSize; // the maximum number of segments that this chain can contain
 
 	public bool move;	// if true, this chain will move to target
-	public float speed; // the movement speed of the chain
-	public Vector3 target;	// the target position this chain is to move toward
+	public float speed = 1.0f; // the movement speed of the chain
+	public Transform target;	// the target this chain is to move toward
 
 	protected List<Segment> segments;
 	protected SphereCollider segCollider;
@@ -33,7 +33,7 @@ public class Chain : MonoBehaviour {
 	void Update () {
 		if (move) {
 			move = false;
-			//StartCoroutine(MoveTo (target));
+			StartCoroutine(MoveTo (target));
 		}
 		if (growing) {
 			return;
@@ -67,14 +67,12 @@ public class Chain : MonoBehaviour {
 		if (segments.Count > 0) {
 			prevSeg = segments [segments.Count - 1];
 		} else {
-			prevSeg = null;
+			prevSeg = null;	
 		}
 		
 		GameObject go = (GameObject)Instantiate(segment);
 		go.transform.parent = transform;
-		go.transform.localPosition = new Vector3 (0, 
-		                                     -(go.transform.localScale.y * segments.Count), 
-		                                     0);
+		go.transform.localPosition = new Vector3 (0, -(go.transform.localScale.y * segments.Count), 0);
 
 		Segment seg = go.GetComponent<Segment>();
 
@@ -97,20 +95,27 @@ public class Chain : MonoBehaviour {
 	}
 
 	// MoveTo moves the chain's head to to
-	public IEnumerator MoveTo(Vector3 to) {
-		if (segments.Count <= 0) {
-			return false;
-		}
-		while (Vector3.Distance(transform.position, to) > (Time.deltaTime * speed)) {
-			transform.position = Vector3.MoveTowards(transform.position, to, Time.deltaTime * speed);
-			// move the tail segments
-			for (int i = 0; i < segments.Count - 1; ++i) {
-				Segment s0 = segments[i];
-				Segment s1 = segments[i+1];
-				s1.transform.position = Vector3.MoveTowards(s1.transform.position, s0.transform.position, Time.deltaTime * speed);
-			}
+	public IEnumerator MoveTo(Transform to) {
+		// rotate toward target
+		Quaternion dir = Quaternion.LookRotation (Vector3.forward, target.position - transform.position);
+		while (Quaternion.Angle(transform.rotation, dir) > 0.05f) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, dir, Time.deltaTime * speed);
 			yield return null;
 		}
-		transform.position = to;
+		transform.rotation = dir;
+
+		// move toward target
+		while (Vector3.Distance(transform.position, to.position) > (Time.deltaTime * speed)) {
+			transform.position = Vector3.MoveTowards(transform.position, to.position, Time.deltaTime * speed);
+			yield return null;
+		}
+		transform.position = to.position;
+
+		// reorient self
+		while (Quaternion.Angle(transform.rotation, dir) > 0.05f) {
+			transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.identity, Time.deltaTime * speed);
+			yield return null;
+		}
+		transform.rotation = Quaternion.identity;
 	}
 }
