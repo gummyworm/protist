@@ -44,7 +44,6 @@ public class Coccus : Segment {
 
 	void Resize() {
 		float s = growCurve.Evaluate(growTime);
-		transform.position += new Vector3(0, (s - prevSize)/2.0f, 0);
 		transform.localScale = new Vector3(s, s, s);
 		prevSize = s;
 	}
@@ -61,15 +60,7 @@ public class Coccus : Segment {
 	}
 
 	public override void Link(Segment other) {
-		float r1 = 0.0f, r2 = 0.0f;
-		if (GetComponent<SphereCollider>() != null) {
-			r1 = GetComponent<SphereCollider>().radius;
-		}
-		if (other.GetComponent<SphereCollider> () != null) {
-			r2 = other.GetComponent<SphereCollider>().radius;
-		}
-		other.transform.localPosition = other.transform.position +
-			new Vector3 (0, transform.position.y + (r1 + r2), 0);
+		//TODO: put something here??
 	}
 
 	public override void OnTouch ()
