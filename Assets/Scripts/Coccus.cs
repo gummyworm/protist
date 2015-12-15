@@ -70,8 +70,9 @@ public class Coccus : Segment {
 	}
 
 	public override IEnumerator Pulse() {
-		if (soundSrc != null) {
-			pulseSound.Play();
+		if (soundSrc != null && pulseSound != null) {	
+			soundSrc.clip = pulseSound;	
+			soundSrc.Play();
 		}
 		if (ren == null) {
 			return false;

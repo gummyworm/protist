@@ -2,8 +2,9 @@
 using System.Collections;
 
 public class Segment : MonoBehaviour {
+	public AudioClip pulseSound;
+
 	protected AudioSource soundSrc;
-	protected AudioSource pulseSound;
 	protected bool growing;
 
 	// Use this for initialization
